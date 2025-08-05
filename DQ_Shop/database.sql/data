@@ -1,0 +1,106 @@
+-- Cơ sở dữ liệu DQShop
+DROP DATABASE IF EXISTS dqshop;
+CREATE DATABASE dqshop CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE dqshop;
+
+-- Bảng người dùng
+CREATE TABLE users (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    address VARCHAR(255),
+    role ENUM('user','admin') NOT NULL DEFAULT 'user',
+);
+
+-- Bảng danh mục
+CREATE TABLE categories (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    parent_id INT ,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
+);
+
+-- Bảng sản phẩm
+CREATE TABLE products (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    category_id INT  NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    slug VARCHAR(180) NOT NULL UNIQUE,
+    price DECIMAL(12,2) NOT NULL,
+    discount_price DECIMAL(12,2),
+    description TEXT,
+    image VARCHAR(255),
+    stock INT UNSIGNED DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+);
+
+-- Bảng đơn hàng
+CREATE TABLE orders (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    user_id INT  NOT NULL,
+    full_name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    address VARCHAR(255),
+    total_amount DECIMAL(12,2) NOT NULL,
+    status ENUM('pending','confirmed','shipping','completed','cancelled') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Bảng chi tiết đơn hàng
+CREATE TABLE order_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT  NOT NULL,
+    product_id INT  NOT NULL,
+    price DECIMAL(12,2) NOT NULL,
+    quantity INT  NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+-- Bảng giỏ hàng (nếu dùng)
+CREATE TABLE cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT  NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE cart_items (
+    id INT  AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT  NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT  DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (cart_id) REFERENCES cart(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+-- Dữ liệu mẫu danh mục
+INSERT INTO categories (name) VALUES
+('Laptop'),
+('Chuột'),
+('Bàn phím'),
+('Tai nghe'),
+('RAM');
+
+-- Dữ liệu mẫu sản phẩm
+INSERT INTO products (category_id, name, slug, price, discount_price, description, image, stock) VALUES
+(1, 'Laptop Asus ROG Strix G16', 'laptop-asus-rog-strix-g16', 38990000, 35990000, 'Laptop gaming 16‑inch CPU Intel Core i9‑14900HX, RTX 4070, RAM 32GB', 'rog-g16.jpg', 12),
+(1, 'MacBook Pro 14‑inch M3 Pro', 'macbook-pro-14-m3-pro', 52990000, NULL, 'Apple M3 Pro 11‑core CPU, 14‑core GPU, 16GB RAM, 512GB SSD', 'mbp14-m3.jpg', 8),
+(2, 'Logitech G502 X Plus Wireless', 'logitech-g502-x-plus', 4990000, 4190000, 'Chuột gaming không dây, 89g, 25600 DPI, LIGHTSPEED', 'g502x.jpg', 25),
+(3, 'Bàn phím Keychron Q1 Pro', 'keychron-q1-pro', 4290000, 3990000, 'QMK/VIA, Bluetooth 5.1, Gasket Mount, ANSI', 'q1pro.jpg', 15),
+(5, 'RAM Kingston Fury Beast 32GB DDR5‑6000', 'ram-kingston-fury-32gb-ddr5-6000',   , NULL, 'Kit 2x16GB CL36, XMP 3.0', 'fury-ddr5.jpg', 20);
+
+-- Người dùng mẫu
+INSERT INTO users (full_name, email, password_hash, phone, address, role) VALUES
+('Admin', 'admin@dqshop.com', '$2y$10$abcdefghijklmnopqrstuv', '0900000000', 'Hà Nội', 'admin'),
+('Nguyễn Văn A', 'user@example.com', '$2y$10$abcdefghijklmnopqrstuv', '0911111111', 'Hồ Chí Minh', 'user');
