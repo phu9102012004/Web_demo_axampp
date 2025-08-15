@@ -8,8 +8,16 @@ if (isset($_GET['quanly']) && $_GET['quanly'] != '') {
         echo " → <span>Giỏ hàng</span>";
     } elseif ($_GET['quanly'] == 'sanpham') {
         echo " → <span>Chi tiết sản phẩm</span>";
-    }elseif ($_GET['quanly'] == 'danhmuc') {
+    } elseif ($_GET['quanly'] == 'sanpham_full') {
+        echo " → <span>Sản phẩm</span>";
+    } elseif ($_GET['quanly'] == 'danhmuc') {
         echo " → <span>Tất cả sản phẩm</span>";
+    } elseif ($_GET['quanly'] == 'dangnhap') {
+        echo " → <span>Đăng nhập tài khoản</span>";
+    } elseif ($_GET['quanly'] == 'dangky') {
+        echo " → <span>Đăng ký tài khoản</span>";
+    } elseif ($_GET['quanly'] == 'profile') {
+        echo " → <span>Trang khách hàng</span>";
     } elseif ($_GET['quanly'] == 'danhmucsanpham') {
         if (isset($_GET['id']) && $_GET['id'] != '') {
             $id = intval($_GET['id']);

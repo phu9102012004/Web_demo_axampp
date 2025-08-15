@@ -3,11 +3,13 @@ session_start();
 require_once __DIR__ . '/../../admincp/config/config.php';
 if (isset($_POST['dangnhap'])) {
   $taikhoan = mysqli_real_escape_string($mysqli, $_POST['email']);
-  $matkhau = $_POST['password'];
+  $matkhau = $_POST['password'];    
   $sql = "SELECT * FROM tbl_users WHERE email = '$taikhoan' LIMIT 1";
   $row = mysqli_query($mysqli, $sql);
   $user = mysqli_fetch_assoc($row);
   if ($user && password_verify($matkhau, $user['matkhau'])) {
+    // Sau khi kiểm tra đăng nhập thành công
+    $_SESSION['user_id'] = $row['id']; // Lưu id vào session
     $_SESSION['user'] = [
       'id' => $user['id'],
       'name' => $user['tenkhachhang'],

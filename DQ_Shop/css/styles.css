@@ -726,3 +726,75 @@ form input {
   text-align: center;
   text-decoration: none;
 }
+
+/*profile*/
+.tong{
+  display: flex;
+  justify-content: space-between;
+}
+/* Khung chứa menu tài khoản */
+.acc-menu {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Các mục trong menu */
+.acc-menu li {
+    border-bottom: 1px solid #ddd;
+}
+
+.acc-menu li:last-child {
+    border-bottom: none;
+}
+
+/* Link trong menu */
+.acc-menu li a {
+    display: block;
+    padding: 10px 14px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+/* Hover vào mục menu */
+.acc-menu li a:hover {
+    background: #f5f5f5;
+    color: #c00;
+}
+
+/* Mục đang active */
+.acc-menu li.active a {
+    background: #c00;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Nội dung bên phải */
+.container section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+}
+
+/* Bảng đơn hàng */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.order-table th, .order-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.order-table th {
+    background: #f0f0f0;
+    text-align: left;
+}

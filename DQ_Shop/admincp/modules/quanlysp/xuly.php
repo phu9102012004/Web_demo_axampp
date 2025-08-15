@@ -23,7 +23,7 @@ if (isset($_POST['themsanpham'])) {
         $sql = "SELECT * FROM tbl_sanpham WHERE id_sanpham = '$_GET[idsanpham]' LIMIT 1";
         $query = mysqli_query($mysqli, $sql);
         while ($row = mysqli_fetch_array($query)) {
-            unlink('../img/' . $row['hinhanh']);
+            unlink('../../img/' . $row['hinhanh']);
         }
     } else {
         $sql_update = "UPDATE tbl_sanpham SET tensanpham='$tensanpham', noidung='$noidung', gia='$gia', soluong='$soluong', trangthai='$trangthai', id_danhmuc='$danhmuc' WHERE id_sanpham='$id'";
